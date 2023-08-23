@@ -294,6 +294,11 @@ console.log(
  * Повертаємо - Масив булевих значень: true, якщо ключ присутній у словнику, та false, якщо ключ відсутній.
  */
 function checkPresence(dictionary, keys) {
+  let presence = [];
+  keys.forEach((key) => {
+    presence.push(dictionary.has(key));
+  });
+  return presence;
   // Створюємо порожній масив для збереження результатів перевірки
   // Використовуємо цикл forEach для перебору масиву ключів
   // Додаємо результат перевірки (true або false) до масиву presence при наявності ключа у словнику
@@ -322,6 +327,13 @@ console.log(
  * Повертаємо - Розмір фільтрованого словника.
  */
 function getFilteredDictionarySize(dictionary, filter) {
+  let FilteredDictionary = new Map();
+  for (let [key, value] of dictionary.entries()) {
+    if (filter(key, value)) {
+      FilteredDictionary.set(key, value);
+    }
+  }
+  return FilteredDictionary.size;
   // Створюємо новий Map об'єкт для зберігання елементів, що відповідають фільтру
   // Використовуємо for...of цикл разом з методом entries() для перебору пар [ключ, значення] словника
   // Якщо пара [ключ, значення] відповідає фільтру, додаємо її до фільтрованого словника
@@ -351,6 +363,9 @@ console.log(
  * Повертаємо - Відсортований словник.
  */
 function sortByValues(dictionary) {
+  let entries = [...dictionary.entries()];
+  entries.sort((a, b) => b[1] - a[1]);
+  return new Map(entries);
   // Конвертуємо словник в масив пар ключ-значення за допомогою оператора деструктурізації
   // Сортуємо масив пар ключ-значення за значеннями в порядку спадання
   // Конвертуємо відсортований масив пар ключ-значення назад у словник
@@ -384,6 +399,11 @@ console.log(
  * Повертаємо - true, якщо словник був очищений, або false в іншому випадку.
  */
 function resetDictionary(dictionary, maxSize) {
+  if (dictionary.size > maxSize) {
+    dictionary.clear();
+    return true;
+  }
+  return false;
   // Використовуємо метод size для перевірки кількості елементів у словнику
   // Якщо кількість елементів більша ніж максимально допустима, очищуємо словник за допомогою методу clear
   // Повертаємо true, оскільки словник був очищений
@@ -417,6 +437,15 @@ console.log(
  * Повертає - Множину, яка містить ключі словника в модифікованому вигляді.
  */
 function convertDictionaryToSet(dictionary) {
+  let newSet = new Set();
+  for (let key of dictionary.keys()) {
+    if (typeof key === "string") {
+      newSet.add(key.toUpperCase());
+    } else if (typeof key === "number") {
+      newSet.add(key + 1);
+    }
+  }
+  return newSet;
   // Перебираємо ключі словника
   // Якщо ключ є рядком, переводимо його в верхній регістр і додаємо до множини
   // Якщо ключ є числом, збільшуємо його на 1 і додаємо до множини
@@ -446,6 +475,11 @@ console.log(convertDictionaryToSet(mixedDictionary));
  * Повертає - Словник, який містить елементи множини як ключі та їх коди перших символів як значення.
  */
 function convertSetToDictionary(set) {
+  let newDictionary = new Map();
+  for (let item of set) {
+    newDictionary.set(item, item.charCodeAt(0));
+  }
+  return newDictionary;
   // Перебираємо елементи множини
   // Додаємо елемент в словник з ключем, який дорівнює елементу, та значенням, яке дорівнює коду його першого символу
   // Повертаємо отриманий словник
